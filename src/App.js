@@ -1,41 +1,87 @@
-import React, { useCallback } from "react";
-import { BrowserRouter as Router } from "react-router-dom";
-import { initDb, addPatient } from "./services/databaseService";
+import React, { useEffect, useState, useCallback } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { initDb, getPatients, addPatient } from "./services/databaseService";
 import PatientForm from "./components/PatientForm/PatientForm";
+import PatientList from "./components/PatientList/PatientList";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
+import { FaUsers, FaPlus } from "react-icons/fa";
+
+const Section = ({ id, title, children, span = "md:col-span-1" }) => {
+  const icons = {
+    register: <FaPlus size={20} className="text-[#334EAC]" />,
+    patients: <FaUsers size={20} className="text-[#334EAC]" />,
+  };
+
+  return (
+    <section
+      id={id}
+      className={`${span} relative overflow-hidden bg-white p-3 rounded-lg shadow-sm border border-[#BAD6EB]/20`}
+    >
+      <div className="relative z-10">
+        <div className="flex items-center justify-between mb-5 pb-2 border-b border-[#BAD6EB]/20">
+          <div className="flex items-center gap-2">
+            {icons[id]}
+            <h2 className="text-lg font-medium text-[#081F5C]">{title}</h2>
+          </div>
+        </div>
+        {children}
+      </div>
+    </section>
+  );
+};
 
 const App = () => {
-  const handleAddPatient = useCallback(async (patient) => {
+  const [patients, setPatients] = useState([]);
+
+  const fetchData = useCallback(async () => {
     try {
       await initDb();
-      await addPatient(patient);
-      console.log("Patient added successfully");
+      const data = await getPatients();
+      setPatients(data);
     } catch (error) {
-      console.error("Error adding patient:", error);
+      console.error("Error fetching patients:", error);
     }
   }, []);
 
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  const handleAddPatient = useCallback(async (patient) => {
+    try {
+      await addPatient(patient);
+      await fetchData();
+    } catch (error) {
+      console.error("Error adding patient:", error);
+    }
+  }, [fetchData]);
+
   return (
     <Router>
-      <div className="min-h-screen flex flex-col">
-        <Header />
+      <div className="min-h-screen relative overflow-hidden">
+        <div className="relative z-10">
+          <Header />
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <main className="container mx-auto px-4 py-10">
+                  <div className="flex flex-col gap-8">
+                    <Section id="register" title="Register New Patient">
+                      <PatientForm onAddPatient={handleAddPatient} />
+                    </Section>
 
-        <main className="flex-grow container mx-auto px-4 py-10">
-          <section className="bg-white p-6 rounded-lg shadow border border-[#BAD6EB]/20">
-            <h2 className="text-lg font-medium text-[#081F5C] mb-4 flex items-center gap-2">
-              <span className="text-[#334EAC]">
-                <svg width="20" height="20" fill="currentColor">
-                  <circle cx="10" cy="10" r="10" />
-                </svg>
-              </span>
-              Register New Patient
-            </h2>
-            <PatientForm onAddPatient={handleAddPatient} />
-          </section>
-        </main>
-
-        <Footer />
+                    <Section id="patients" title="Patients List" span="md:col-span-2">
+                      <PatientList patients={patients} />
+                    </Section>
+                  </div>
+                </main>
+              }
+            />
+          </Routes>
+          <Footer />
+        </div>
       </div>
     </Router>
   );
