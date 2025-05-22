@@ -23,10 +23,10 @@ export const initDb = async () => {
       phone TEXT,
       email TEXT,
       address TEXT,
-      emergencyContactName TEXT,
-      emergencyContactRelation TEXT,
-      emergencyContactPhone TEXT,
-      bloodGroup TEXT,
+      emergencycontactname TEXT,
+      emergencycontactrelation TEXT,
+      emergencycontactphone TEXT,
+      bloodgroup TEXT,
       allergies TEXT,
       conditions TEXT
     );
@@ -36,23 +36,39 @@ export const initDb = async () => {
 export const addPatient = async (patient) => {
   const {
     name, dob, age, gender, phone, email, address,
-    emergencyContactName, emergencyContactRelation, emergencyContactPhone,
-    bloodGroup, allergies, conditions
+    emergencycontactname, emergencycontactrelation, emergencycontactphone,
+    bloodgroup, allergies, conditions
   } = patient;
 
   await executeQuery(
     `INSERT INTO patients (
       name, dob, age, gender, phone, email, address,
-      emergencyContactName, emergencyContactRelation, emergencyContactPhone,
-      bloodGroup, allergies, conditions
+      emergencycontactname, emergencycontactrelation, emergencycontactphone,
+      bloodgroup, allergies, conditions
     ) VALUES (
       $1, $2, $3, $4, $5, $6, $7,
       $8, $9, $10, $11, $12, $13
     )`,
     [
       name, dob, age, gender, phone, email, address,
-      emergencyContactName, emergencyContactRelation, emergencyContactPhone,
-      bloodGroup, allergies, conditions
+      emergencycontactname, emergencycontactrelation, emergencycontactphone,
+      bloodgroup, allergies, conditions
+    ]
+  );
+};
+
+export const updatePatient = async (id, patient) => {
+  await executeQuery(
+    `UPDATE patients SET 
+      name = $1, dob = $2, age = $3, gender = $4, phone = $5, email = $6, address = $7,
+      emergencycontactname = $8, emergencycontactrelation = $9, emergencycontactphone = $10,
+      bloodgroup = $11, allergies = $12, conditions = $13
+    	WHERE id = $14`,
+    [
+      patient.name, patient.dob, patient.age, patient.gender, patient.phone, patient.email, patient.address,
+      patient.emergencycontactname, patient.emergencycontactrelation, patient.emergencycontactphone,
+      patient.bloodgroup, patient.allergies, patient.conditions,
+      id
     ]
   );
 };
@@ -63,4 +79,8 @@ export const getPatients = async () => {
 
 export const queryPatients = async (sql) => {
   return await executeQuery(sql);
+};
+
+export const deletePatient = async (id) => {
+  await executeQuery(`DELETE FROM patients WHERE id = $1`, [id]);
 };
