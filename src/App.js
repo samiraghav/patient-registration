@@ -9,6 +9,7 @@ import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import EditPatientForm from "./components/EditPatientForm/EditPatientForm";
 import { FaUsers, FaSearch, FaPlus } from "react-icons/fa";
+import NotFound from './pages/NotFound';
 
 const Section = ({ id, title, children, span = "md:col-span-1" }) => {
   const icons = {
@@ -73,11 +74,11 @@ const App = () => {
               element={
                 <main className="container mx-auto px-4 py-10">
                   <div className="flex flex-col gap-8">
-                    <Section id="register" title="Register New Patient">
+                    <Section id="register" title="Register Patient">
                       <PatientForm onAddPatient={handleAddPatient} />
                     </Section>
 
-                    <Section id="patients" title="Patients List" span="md:col-span-2">
+                    <Section id="patients" title="List" span="md:col-span-2">
                       {{
                         content: (
                           <div>
@@ -98,6 +99,7 @@ const App = () => {
             />
             <Route path="/patients/:id" element={<PatientDetailPage />} />
             <Route path="/edit/:id" element={<EditPatientForm onPatientUpdated={fetchData} />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
 
           <Footer />
