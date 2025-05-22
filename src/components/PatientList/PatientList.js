@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { FaUserCircle, FaEdit, FaTrash } from 'react-icons/fa';
 import { deletePatient } from '../../services/databaseService';
+import { useSnackbar } from 'notistack';
 
 const calculateAge = (dobString) => {
   if (!dobString) return '';
@@ -18,12 +19,36 @@ const PatientCard = ({ patient, index, onDelete }) => {
   const navigate = useNavigate();
   const age = calculateAge(patient.dob);
 
-  const handleDelete = async () => {
-    const confirmed = window.confirm(`Delete patient "${patient.name}"?`);
-    if (confirmed) {
-      await deletePatient(patient.id);
-      if (onDelete) onDelete(); // refresh list from parent
-    }
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
+  const handleDelete = () => {
+    const action = (snackbarId) => (
+      <div className="flex gap-2">
+        <button
+          className="text-red-500 font-semibold text-sm"
+          onClick={async () => {
+            await deletePatient(patient.id);
+            enqueueSnackbar('Patient deleted successfully!', { variant: 'success' });
+            if (onDelete) onDelete();
+            closeSnackbar(snackbarId);
+          }}
+        >
+          Confirm
+        </button>
+        <button
+          className="text-blue-500 font-semibold text-sm"
+          onClick={() => closeSnackbar(snackbarId)}
+        >
+          Cancel
+        </button>
+      </div>
+    );
+
+    enqueueSnackbar(`Delete "${patient.name}"?`, {
+      variant: 'warning',
+      action,
+      persist: true,
+    });
   };
 
   return (

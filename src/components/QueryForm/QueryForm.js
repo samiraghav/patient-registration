@@ -44,7 +44,7 @@ const QueryForm = ({ onQueryExecuted }) => {
             onChange={(e) => setSql(e.target.value)}
             placeholder="SELECT * FROM patients WHERE age >= 60"
             rows={6}
-            className="w-full p-3 border border-[#BAD6EB]/40 rounded-md shadow-sm font-mono text-sm focus:outline-none focus:ring-2 focus:ring-[#334EAC]/30"
+            className="w-full p-3 border border-[#BAD6EB]/40 h-[260px] rounded-md shadow-sm font-mono text-sm focus:outline-none focus:ring-2 focus:ring-[#334EAC]/30"
             required
           />
 
