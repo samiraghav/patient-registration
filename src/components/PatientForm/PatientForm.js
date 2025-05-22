@@ -98,10 +98,34 @@ const PatientForm = ({ onAddPatient }) => {
         <InputField id="allergies" name="allergies" type="textarea" value={patient.allergies} onChange={handleChange} required icon="FaNotesMedical" label="Allergies" />
         <InputField id="conditions" name="conditions" type="textarea" value={patient.conditions} onChange={handleChange} required icon="FaProcedures" label="Medical Conditions" />
 
-        <div className="col-span-full">
+        <div className="col-span-full flex gap-4 justify-end">
+          <button
+            type="button"
+            onClick={() =>
+              setPatient({
+                name: '',
+                dob: '',
+                age: '',
+                gender: '',
+                phone: '',
+                email: '',
+                address: '',
+                emergencycontactname: '',
+                emergencycontactrelation: '',
+                emergencycontactphone: '',
+                bloodgroup: '',
+                allergies: '',
+                conditions: ''
+              })
+            }
+            className="px-4 py-2 border border-[#334EAC] text-[#334EAC] rounded-md hover:bg-[#F0F4FF] transition"
+          >
+            Discard Changes
+          </button>
+
           <button
             type="submit"
-            className="w-full py-2 bg-[rgb(37,99,235)] hover:from-[#2A3F8D] hover:to-[#5C7AB0] text-white font-medium text-sm rounded-md flex items-center justify-center gap-2"
+            className="px-4 py-2 bg-[rgb(37,99,235)] hover:bg-[#2A3F8D] text-white rounded-md flex items-center gap-2"
           >
             <FaSave />
             Register Patient
