@@ -50,7 +50,7 @@ const EditPatientForm = ({ onPatientUpdated }) => {
       await updatePatient(id, cleaned);
       enqueueSnackbar('Patient updated successfully!', { variant: 'success' });
       if (onPatientUpdated) onPatientUpdated();
-      navigate("/register");
+      navigate("/admin");
     } catch (error) {
       enqueueSnackbar('Failed to update patient.', { variant: 'error' });
       console.error('Update failed:', error);
@@ -84,7 +84,7 @@ const EditPatientForm = ({ onPatientUpdated }) => {
         <div className="col-span-full flex gap-4 justify-end">
           <button
             type="button"
-            onClick={() => navigate("/register")}
+            onClick={() => navigate("/admin")}
             className="px-4 py-2 border border-[#334EAC] text-[#334EAC] rounded-md hover:bg-[#F0F4FF] transition"
           >
             Discard Changes
