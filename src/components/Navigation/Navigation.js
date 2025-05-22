@@ -14,12 +14,11 @@ const Navigation = () => {
 
   const handleNavClick = (id) => {
     setIsOpen(false);
-    navigate("/register", { replace: false });
-
+    navigate("/", { replace: true });
     setTimeout(() => {
       const section = document.getElementById(id);
       if (section) section.scrollIntoView({ behavior: "smooth" });
-    }, 200);
+    }, 100);
   };
 
   return (
