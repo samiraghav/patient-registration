@@ -50,7 +50,7 @@ const EditPatientForm = ({ onPatientUpdated }) => {
       await updatePatient(id, cleaned);
       enqueueSnackbar('Patient updated successfully!', { variant: 'success' });
       if (onPatientUpdated) onPatientUpdated();
-      navigate("/");
+      navigate("/register");
     } catch (error) {
       enqueueSnackbar('Failed to update patient.', { variant: 'error' });
       console.error('Update failed:', error);
@@ -81,13 +81,20 @@ const EditPatientForm = ({ onPatientUpdated }) => {
         <InputField id="allergies" name="allergies" type="textarea" value={patient.allergies || ''} onChange={handleChange} icon="FaNotesMedical" label="Allergies" />
         <InputField id="conditions" name="conditions" type="textarea" value={patient.conditions || ''} onChange={handleChange} icon="FaProcedures" label="Medical Conditions" />
 
-        <div className="col-span-full">
+        <div className="col-span-full flex gap-4 justify-end">
+          <button
+            type="button"
+            onClick={() => navigate("/register")}
+            className="px-4 py-2 border border-[#334EAC] text-[#334EAC] rounded-md hover:bg-[#F0F4FF] transition"
+          >
+            Discard Changes
+          </button>
           <button
             type="submit"
-            className="w-full py-2 bg-[rgb(37,99,235)] hover:bg-[#2A3F8D] text-white font-medium text-sm rounded-md flex items-center justify-center gap-2"
+            className="px-4 py-2 bg-[rgb(37,99,235)] hover:bg-[#2A3F8D] text-white rounded-md flex items-center gap-2"
           >
             <FaSave />
-            Save Changes
+            Update Changes
           </button>
         </div>
       </form>
