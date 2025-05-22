@@ -29,12 +29,24 @@ export const bloodGroupOptions = [
   { value: "O-", label: "O-" },
 ];
 
-export const InputField = ({ id, name, type = "text", value, onChange, placeholder, required, icon: Icon, label }) => (
+export const InputField = ({
+  id,
+  name,
+  type = "text",
+  value,
+  onChange,
+  placeholder,
+  required = false,
+  icon: Icon,
+  label,
+}) => (
   <div className="flex flex-col gap-1">
-    <label htmlFor={id} className="text-sm font-medium text-[#081F5C] flex items-center gap-1">
-      <Icon className="text-[#334EAC]" />
-      {label}
-    </label>
+    {label && (
+      <label htmlFor={id} className="text-sm font-medium text-[#081F5C] flex items-center gap-2">
+        {Icon && <Icon className="text-[#334EAC]" />}
+        {label}
+      </label>
+    )}
     {type === "textarea" ? (
       <textarea
         id={id}
@@ -61,12 +73,23 @@ export const InputField = ({ id, name, type = "text", value, onChange, placehold
   </div>
 );
 
-export const SelectField = ({ id, name, value, onChange, required, icon: Icon, label, options }) => (
+export const SelectField = ({
+  id,
+  name,
+  value,
+  onChange,
+  required = false,
+  icon: Icon,
+  label,
+  options = [],
+}) => (
   <div className="flex flex-col gap-1">
-    <label htmlFor={id} className="text-sm font-medium text-[#081F5C] flex items-center gap-1">
-      <Icon className="text-[#334EAC]" />
-      {label}
-    </label>
+    {label && (
+      <label htmlFor={id} className="text-sm font-medium text-[#081F5C] flex items-center gap-2">
+        {Icon && <Icon className="text-[#334EAC]" />}
+        {label}
+      </label>
+    )}
     <select
       id={id}
       name={name}
@@ -75,8 +98,12 @@ export const SelectField = ({ id, name, value, onChange, required, icon: Icon, l
       required={required}
       className="px-3 py-2 border border-[#BAD6EB]/40 rounded-md shadow-sm focus:ring-2 focus:ring-[#334EAC]/30 focus:border-[#334EAC]"
     >
-      {options.map(option => (
-        <option key={option.value} value={option.value} disabled={option.disabled}>
+      {options.map((option) => (
+        <option
+          key={option.value}
+          value={option.value}
+          disabled={option.disabled}
+        >
           {option.label}
         </option>
       ))}

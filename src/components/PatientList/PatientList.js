@@ -1,3 +1,4 @@
+import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaUserCircle, FaEdit, FaTrash } from 'react-icons/fa';
 import { deletePatient } from '../../services/databaseService';
@@ -72,16 +73,10 @@ const PatientCard = ({ patient, index, onDelete }) => {
       </div>
 
       <div className="flex gap-3">
-        <button
-          className="text-[#334EAC] hover:text-[#2a3f8d]"
-          onClick={() => navigate(`/edit/${patient.id}`)}
-        >
+        <button className="text-[#334EAC] hover:text-[#2a3f8d]" onClick={() => navigate(`/edit/${patient.id}`)}>
           <FaEdit size={18} />
         </button>
-        <button
-          className="text-red-500 hover:text-red-700"
-          onClick={handleDelete}
-        >
+        <button className="text-red-500 hover:text-red-700" onClick={handleDelete}>
           <FaTrash size={18} />
         </button>
       </div>
@@ -90,15 +85,43 @@ const PatientCard = ({ patient, index, onDelete }) => {
 };
 
 const PatientList = ({ patients, onDelete }) => {
+  const [sortBy, setSortBy] = useState('created_at');
+
+  const sortedPatients = useMemo(() => {
+    return [...patients].sort((a, b) => {
+      if (sortBy === 'name') {
+        return a.name.localeCompare(b.name);
+      } else if (sortBy === 'age') {
+        return calculateAge(b.dob) - calculateAge(a.dob);
+      } else {
+        return new Date(b.created_at) - new Date(a.created_at);
+      }
+    });
+  }, [patients, sortBy]);
+
   return (
-    <div className="flex flex-col space-y-4 max-h-[600px] overflow-y-auto scrollbar-thin scrollbar-thumb-[#BAD6EB]">
-      {patients.length === 0 ? (
-        <p className="text-sm text-[#7096D1] text-center">No patients found.</p>
-      ) : (
-        patients.map((patient, index) => (
-          <PatientCard key={patient.id} patient={patient} index={index} onDelete={onDelete} />
-        ))
-      )}
+    <div className="flex flex-col gap-4">
+      <div className="flex justify-end mb-2">
+        <select
+          className="text-sm border px-2 py-1 rounded-md text-[#081F5C] border-[#BAD6EB]/40"
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value)}
+        >
+          <option value="created_at">Sort by: Created At</option>
+          <option value="name">Sort by: Name</option>
+          <option value="age">Sort by: Age</option>
+        </select>
+      </div>
+
+      <div className="flex flex-col space-y-4 max-h-[600px] overflow-y-auto scrollbar-thin scrollbar-thumb-[#BAD6EB]">
+        {sortedPatients.length === 0 ? (
+          <p className="text-sm text-[#7096D1] text-center">No patients found.</p>
+        ) : (
+          sortedPatients.map((patient, index) => (
+            <PatientCard key={patient.id} patient={patient} index={index} onDelete={onDelete} />
+          ))
+        )}
+      </div>
     </div>
   );
 };

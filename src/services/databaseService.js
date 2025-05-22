@@ -28,7 +28,9 @@ export const initDb = async () => {
       emergencycontactphone TEXT,
       bloodgroup TEXT,
       allergies TEXT,
-      conditions TEXT
+      conditions TEXT,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      modified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
   `);
 };
@@ -59,22 +61,23 @@ export const addPatient = async (patient) => {
 
 export const updatePatient = async (id, patient) => {
   await executeQuery(
-    `UPDATE patients SET 
-      name = $1, dob = $2, age = $3, gender = $4, phone = $5, email = $6, address = $7,
-      emergencycontactname = $8, emergencycontactrelation = $9, emergencycontactphone = $10,
-      bloodgroup = $11, allergies = $12, conditions = $13
-    	WHERE id = $14`,
-    [
-      patient.name, patient.dob, patient.age, patient.gender, patient.phone, patient.email, patient.address,
-      patient.emergencycontactname, patient.emergencycontactrelation, patient.emergencycontactphone,
-      patient.bloodgroup, patient.allergies, patient.conditions,
-      id
-    ]
-  );
+		`UPDATE patients SET 
+			name = $1, dob = $2, age = $3, gender = $4, phone = $5, email = $6, address = $7,
+			emergencycontactname = $8, emergencycontactrelation = $9, emergencycontactphone = $10,
+			bloodgroup = $11, allergies = $12, conditions = $13,
+			modified_at = CURRENT_TIMESTAMP
+			WHERE id = $14`,
+		[
+			patient.name, patient.dob, patient.age, patient.gender, patient.phone, patient.email, patient.address,
+			patient.emergencycontactname, patient.emergencycontactrelation, patient.emergencycontactphone,
+			patient.bloodgroup, patient.allergies, patient.conditions,
+			id
+		]
+	);
 };
 
 export const getPatients = async () => {
-  return await executeQuery('SELECT * FROM patients');
+  return await executeQuery('SELECT * FROM patients ORDER BY created_at DESC');
 };
 
 export const queryPatients = async (sql) => {
