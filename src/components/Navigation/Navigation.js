@@ -1,4 +1,3 @@
-// src/components/Navigation/Navigation.js
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
@@ -24,7 +23,6 @@ const Navigation = () => {
 
   return (
     <>
-      {/* Desktop Navigation */}
       <nav className="hidden md:flex gap-4">
         {navItems.map((item) => (
           <button
@@ -37,7 +35,6 @@ const Navigation = () => {
         ))}
       </nav>
 
-      {/* Mobile Button */}
       <div className="md:hidden">
         <button
           onClick={() => setIsOpen(true)}
@@ -47,7 +44,6 @@ const Navigation = () => {
         </button>
       </div>
 
-      {/* Sidebar Overlay */}
       <div
         className={`fixed inset-0 z-40 bg-black/40 transition-opacity duration-300 ${
           isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
@@ -55,13 +51,11 @@ const Navigation = () => {
         onClick={() => setIsOpen(false)}
       />
 
-      {/* Sidebar Panel */}
       <div
         className={`fixed top-0 right-0 h-full w-[90%] max-w-xs bg-white z-50 shadow-lg transform transition-transform duration-300 ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
-        {/* Close Button */}
         <div className="flex justify-end p-4 border-b border-[#BAD6EB]/30">
           <button
             onClick={() => setIsOpen(false)}
@@ -71,7 +65,6 @@ const Navigation = () => {
           </button>
         </div>
 
-        {/* Sidebar Links */}
         <div className="flex flex-col gap-4 p-6">
           {navItems.map((item) => (
             <button
