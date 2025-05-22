@@ -3,14 +3,18 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { initDb, getPatients, addPatient } from "./services/databaseService";
 import PatientForm from "./components/PatientForm/PatientForm";
 import PatientList from "./components/PatientList/PatientList";
+import PatientDetailPage from "./components/PatientDetail/PatientDetail";
+import QueryForm from "./components/QueryForm/QueryForm";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
-import { FaUsers, FaPlus } from "react-icons/fa";
+import EditPatientForm from "./components/EditPatientForm/EditPatientForm";
+import { FaUsers, FaSearch, FaPlus } from "react-icons/fa";
 
 const Section = ({ id, title, children, span = "md:col-span-1" }) => {
   const icons = {
     register: <FaPlus size={20} className="text-[#334EAC]" />,
     patients: <FaUsers size={20} className="text-[#334EAC]" />,
+    query: <FaSearch size={20} className="text-[#334EAC]" />,
   };
 
   return (
@@ -24,8 +28,9 @@ const Section = ({ id, title, children, span = "md:col-span-1" }) => {
             {icons[id]}
             <h2 className="text-lg font-medium text-[#081F5C]">{title}</h2>
           </div>
+          {id === "patients" && children.patientCount}
         </div>
-        {children}
+        {id === "patients" ? children.content : children}
       </div>
     </section>
   );
@@ -73,13 +78,28 @@ const App = () => {
                     </Section>
 
                     <Section id="patients" title="Patients List" span="md:col-span-2">
-                      <PatientList patients={patients} />
+                      {{
+                        content: (
+                          <div>
+                            <PatientList patients={patients} onDelete={fetchData} />
+                          </div>
+                        ),
+                      }}
+                    </Section>
+
+                    <Section id="query" title="Query Patients" span="md:col-span-3">
+                      <div>
+                        <QueryForm onQueryExecuted={fetchData} />
+                      </div>
                     </Section>
                   </div>
                 </main>
               }
             />
+            <Route path="/patients/:id" element={<PatientDetailPage />} />
+            <Route path="/edit/:id" element={<EditPatientForm onPatientUpdated={fetchData} />} />
           </Routes>
+
           <Footer />
         </div>
       </div>

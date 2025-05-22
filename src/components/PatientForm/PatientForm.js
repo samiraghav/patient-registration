@@ -72,10 +72,10 @@ const PatientForm = ({ onAddPatient }) => {
     phone: '',
     email: '',
     address: '',
-    emergencyContactName: '',
-    emergencyContactRelation: '',
-    emergencyContactPhone: '',
-    bloodGroup: '',
+    emergencycontactname: '',
+    emergencycontactrelation: '',
+    emergencycontactphone: '',
+    bloodgroup: '',
     allergies: '',
     conditions: ''
   });
@@ -103,22 +103,29 @@ const PatientForm = ({ onAddPatient }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await onAddPatient(patient);
+
+    // Trim all values before saving
+    const cleanedPatient = Object.fromEntries(
+        Object.entries(patient).map(([key, val]) => [key, val?.trim() || null])
+    );
+
+    await onAddPatient(cleanedPatient);
+
     setPatient({
-      name: '',
-      dob: '',
-      gender: '',
-      phone: '',
-      email: '',
-      address: '',
-      emergencyContactName: '',
-      emergencyContactRelation: '',
-      emergencyContactPhone: '',
-      bloodGroup: '',
-      allergies: '',
-      conditions: ''
+        name: '',
+        dob: '',
+        gender: '',
+        phone: '',
+        email: '',
+        address: '',
+        emergencycontactname: '',
+        emergencycontactrelation: '',
+        emergencycontactphone: '',
+        bloodgroup: '',
+        allergies: '',
+        conditions: ''
     });
-  };
+    };
 
   const genderOptions = [
     { value: "", label: "Select gender", disabled: true },
@@ -127,7 +134,7 @@ const PatientForm = ({ onAddPatient }) => {
     { value: "Other", label: "Other" },
   ];
 
-  const bloodGroupOptions = [
+  const bloodgroupOptions = [
     { value: "", label: "Select blood group", disabled: true },
     { value: "A+", label: "A+" },
     { value: "A-", label: "A-" },
@@ -181,15 +188,15 @@ const PatientForm = ({ onAddPatient }) => {
           Emergency Contact
         </h3>
 
-        <InputField id="emergencyContactName" name="emergencyContactName" value={patient.emergencyContactName} onChange={handleChange} placeholder="Name of emergency contact" icon={FaUserShield} label="Contact Name" />
-        <InputField id="emergencyContactRelation" name="emergencyContactRelation" value={patient.emergencyContactRelation} onChange={handleChange} placeholder="Relationship" icon={FaUser} label="Relation" />
-        <InputField id="emergencyContactPhone" name="emergencyContactPhone" type="tel" value={patient.emergencyContactPhone} onChange={handleChange} placeholder="Phone number" icon={FaPhone} label="Contact Phone" />
+        <InputField id="emergencycontactname" name="emergencycontactname" value={patient.emergencycontactname} onChange={handleChange} placeholder="Name of emergency contact" icon={FaUserShield} label="Contact Name" />
+        <InputField id="emergencycontactrelation" name="emergencycontactrelation" value={patient.emergencycontactrelation} onChange={handleChange} placeholder="Relationship" icon={FaUser} label="Relation" />
+        <InputField id="emergencycontactphone" name="emergencycontactphone" type="tel" value={patient.emergencycontactphone} onChange={handleChange} placeholder="Phone number" icon={FaPhone} label="Contact Phone" />
 
         <h3 className="col-span-full text-[#334EAC] font-bold uppercase text-sm border-b pb-1 pt-4">
           Medical Details
         </h3>
 
-        <SelectField id="bloodGroup" name="bloodGroup" value={patient.bloodGroup} onChange={handleChange} required icon={FaSyringe} label="Blood Group" options={bloodGroupOptions} />
+        <SelectField id="bloodgroup" name="bloodgroup" value={patient.bloodgroup} onChange={handleChange} required icon={FaSyringe} label="Blood Group" options={bloodgroupOptions} />
         <InputField id="allergies" name="allergies" type="textarea" value={patient.allergies} onChange={handleChange} placeholder="List known allergies" required icon={FaNotesMedical} label="Allergies" />
         <InputField id="conditions" name="conditions" type="textarea" value={patient.conditions} onChange={handleChange} placeholder="Any existing conditions" required icon={FaProcedures} label="Medical Conditions" />
 
