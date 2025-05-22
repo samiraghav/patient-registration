@@ -9,8 +9,12 @@ import {
   calculateAge,
 } from '../../helpers/formHelpers';
 import { FaSave } from 'react-icons/fa';
+import { useSnackbar } from 'notistack';
+
 
 const EditPatientForm = ({ onPatientUpdated }) => {
+  const { enqueueSnackbar } = useSnackbar();
+
   const { id } = useParams();
   const navigate = useNavigate();
   const [patient, setPatient] = useState(null);
@@ -35,16 +39,22 @@ const EditPatientForm = ({ onPatientUpdated }) => {
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {    
     e.preventDefault();
 
     const cleaned = Object.fromEntries(
-      Object.entries(patient).map(([k, v]) => [k, v?.toString().trim() || null])
+      Object.entries(patient).map(([k, v]) => [k, typeof v === 'string' ? v.trim() : v])
     );
 
-    await updatePatient(id, cleaned);
-    if (onPatientUpdated) onPatientUpdated();
-    navigate("/");
+    try {
+      await updatePatient(id, cleaned);
+      enqueueSnackbar('Patient updated successfully!', { variant: 'success' });
+      if (onPatientUpdated) onPatientUpdated();
+      navigate("/");
+    } catch (error) {
+      enqueueSnackbar('Failed to update patient.', { variant: 'error' });
+      console.error('Update failed:', error);
+    }
   };
 
   if (!patient) return <div className="p-10 text-center">Loading...</div>;

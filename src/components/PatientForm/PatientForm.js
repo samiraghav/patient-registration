@@ -7,8 +7,11 @@ import {
   calculateAge,
 } from '../../helpers/formHelpers';
 import { FaSave } from 'react-icons/fa';
+import { useSnackbar } from 'notistack';
 
 const PatientForm = ({ onAddPatient }) => {
+  const { enqueueSnackbar } = useSnackbar();
+
   const [patient, setPatient] = useState({
     name: '',
     dob: '',
@@ -42,26 +45,32 @@ const PatientForm = ({ onAddPatient }) => {
     e.preventDefault();
 
     const cleaned = Object.fromEntries(
-      Object.entries(patient).map(([k, v]) => [k, v?.trim() || null])
+      Object.entries(patient).map(([k, v]) => [k, typeof v === 'string' ? v.trim() : v])
     );
 
-    await onAddPatient(cleaned);
 
-    setPatient({
-      name: '',
-      dob: '',
-      age: '',
-      gender: '',
-      phone: '',
-      email: '',
-      address: '',
-      emergencycontactname: '',
-      emergencycontactrelation: '',
-      emergencycontactphone: '',
-      bloodgroup: '',
-      allergies: '',
-      conditions: ''
-    });
+    try {
+      await onAddPatient(cleaned);
+      enqueueSnackbar('Patient registered successfully!', { variant: 'success' });
+      setPatient({
+        name: '',
+        dob: '',
+        age: '',
+        gender: '',
+        phone: '',
+        email: '',
+        address: '',
+        emergencycontactname: '',
+        emergencycontactrelation: '',
+        emergencycontactphone: '',
+        bloodgroup: '',
+        allergies: '',
+        conditions: ''
+      });
+    } catch (error) {
+      enqueueSnackbar('Failed to register patient. Please try again.', { variant: 'error' });
+      console.error('Registration error:', error);
+    }
   };
 
   return (
