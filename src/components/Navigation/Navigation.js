@@ -4,7 +4,7 @@ import { FaBars, FaTimes } from "react-icons/fa";
 
 const navItems = [
   { id: "register", label: "Register New" },
-  { id: "patients", label: "Patients List" },
+  { id: "patients", label: "List" },
   { id: "query", label: "Query Patients" },
 ];
 
