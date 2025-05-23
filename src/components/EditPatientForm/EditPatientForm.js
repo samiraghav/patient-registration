@@ -80,14 +80,14 @@ const EditPatientForm = ({ onPatientUpdated }) => {
             onClick={() => navigate("/")}
             className="px-4 py-2 border border-[#334EAC] text-[#334EAC] rounded-md hover:bg-[#F0F4FF] transition"
           >
-            Discard Details
+            Discard
           </button>
           <button
             type="submit"
             className="px-4 py-2 bg-[rgb(37,99,235)] hover:bg-[#2A3F8D] text-white rounded-md flex items-center gap-2"
           >
             <FaSave />
-            Update Details
+            Update
           </button>
         </div>
       </form>
