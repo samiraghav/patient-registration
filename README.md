@@ -13,7 +13,7 @@ It allows users to:
 
 ---
 
-## 🛠 Features
+## Features
 
 ### 1. Patient Registration
 Users can register a new patient with the following fields:
