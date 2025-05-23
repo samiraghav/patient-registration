@@ -13,6 +13,9 @@ It allows users to:
 
 ---
 
+## Note
+- Footer links are not clickable to start with.
+
 ## Features
 
 ### 1. Patient Registration
