@@ -94,7 +94,7 @@ const QueryForm = ({ onQueryExecuted }) => {
             <FaDatabase /> Results
           </h2>
 
-          <div className="bg-[#F8FAFC] border border-[#BAD6EB]/30 p-4 rounded-md h-[260px] overflow-auto text-sm font-mono">
+          <div className="bg-[#F8FAFC] border border-[#BAD6EB]/30 p-4 rounded-md h-[260px] overflow-auto text-sm font-mono text-left">
             {results.length > 0 ? (
               <pre>{JSON.stringify(results, null, 2)}</pre>
             ) : (
