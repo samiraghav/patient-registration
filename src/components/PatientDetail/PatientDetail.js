@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getPatients } from '../../services/databaseService';
+import { calculateAge } from '../../helpers/formHelpers';
 
 const LabelValue = ({ label, value }) => (
   <div className="flex flex-col">
@@ -35,6 +36,7 @@ const PatientDetails = () => {
         <h3 className="text-[#334EAC] font-semibold text-lg mb-2 border-b border-[#BAD6EB]/30 pb-1">Personal Information</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <LabelValue label="Date of Birth" value={patient.dob} />
+          <LabelValue label="Age" value={`${calculateAge(patient.dob)} years`} />
           <LabelValue label="Gender" value={patient.gender} />
           <LabelValue label="Phone Number" value={patient.phone} />
           <LabelValue label="Email" value={patient.email} />
