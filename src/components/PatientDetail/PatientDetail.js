@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { getPatients } from '../../services/databaseService';
 
 const LabelValue = ({ label, value }) => (
@@ -11,19 +11,19 @@ const LabelValue = ({ label, value }) => (
 
 const PatientDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [patient, setPatient] = useState(null);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
     const fetchData = async () => {
-        const patients = await getPatients();
-        const match = patients.find(p => String(p.id) === id);
-        setPatient(match);
+			const patients = await getPatients();
+			const match = patients.find(p => String(p.id) === id);
+			setPatient(match);
     };
     fetchData();
-    }, [id]);
-
+  }, [id]);
 
   if (!patient) return <div className="p-10 text-center">Loading...</div>;
 
@@ -51,13 +51,22 @@ const PatientDetails = () => {
         </div>
       </div>
 
-      <div>
+      <div className="mb-6">
         <h3 className="text-[#334EAC] font-semibold text-lg mb-2 border-b border-[#BAD6EB]/30 pb-1">Medical Details</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <LabelValue label="Blood Group" value={patient.bloodgroup} />
           <LabelValue label="Allergies" value={patient.allergies} />
           <LabelValue label="Medical Conditions" value={patient.conditions} />
         </div>
+      </div>
+
+      <div className="text-center mt-8">
+        <button
+          onClick={() => navigate(`/edit/${patient.id}`)}
+          className="px-4 py-2 bg-[#2563EB] hover:bg-[#1E40AF] text-white rounded-md shadow transition"
+        >
+          Update Details
+        </button>
       </div>
     </div>
   );
