@@ -95,7 +95,7 @@ const App = () => {
               path="/"
               element={
                 <>
-                  <div className="min-h-screen flex flex-col items-center justify-center text-center bg-white px-4 py-4">
+                  <div className="min-h-screen flex flex-col items-center justify-center text-center bg-white px-8 py-20">
                     <h1 className="text-4xl md:text-5xl font-bold text-[#081F5C] mb-4">
                       Welcome to <span className="text-[#2563EB]">Medblocks</span>
                     </h1>
