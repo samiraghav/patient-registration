@@ -8,6 +8,7 @@ import QueryForm from "./components/QueryForm/QueryForm";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import EditPatientForm from "./components/EditPatientForm/EditPatientForm";
+import NotFound from "./pages/NotFound";
 import { FaUsers, FaSearch, FaPlus, FaUserPlus, FaClipboardList } from "react-icons/fa";
 
 const Section = ({ id, title, children, span = "md:col-span-1" }) => {
@@ -162,6 +163,7 @@ const App = () => {
             />
             <Route path="/patients/:id" element={<PatientDetailPage />} />
             <Route path="/edit/:id" element={<EditPatientForm onPatientUpdated={fetchData} />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
 
           <Footer />
