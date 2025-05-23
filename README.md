@@ -1,137 +1,117 @@
-# Medblocks — Local-first Patient Management System
 
-Medblocks is a modern, offline-first web application for managing patient records in small clinics or hospitals. It features real-time local database storage, structured data entry forms, powerful querying capabilities, and a beautiful, intuitive interface built with React and Tailwind CSS.
+# Medblocks — Patient Registration System
 
----
+This is a fully client-side **Patient Registration App** built with **React** and **PGlite** (a SQLite-compatible database in the browser).
 
-## Features
+It allows users to:
 
-- **Patient Registration:** Clean, validated form with DOB → Age auto-calculation.
-- **Smart Validation:** Prevents future DOB entries and alerts user with toasts.
-- **Full CRUD:** Add, view, edit, delete patients.
-- **Emergency + Medical Info:** Store contact, allergy, condition, and blood group data.
-- **Query System:** Run advanced SQL-like queries (e.g., filter by age/gender).
-- **Offline-first with IndexedDB:** Uses PGlite to store data locally in browser.
-- **Real-time Multi-tab Sync:** Changes in one tab instantly reflect in others.
-- **Modern UI/UX:** Built with React, Tailwind CSS, and React Icons.
+- Register new patients
+- View and manage patient records
+- Run raw SQL queries
+- Auto-sync patient data across tabs
+- Persist data on refresh using localStorage and IndexedDB
 
 ---
 
-## Tech Stack
+## 🛠 Features
 
-- **Frontend:** React 18, React Router, Tailwind CSS, React Icons, Notistack
-- **Local DB:** [@electric-sql/pglite](https://github.com/electric-sql/pglite) — PostgreSQL running on IndexedDB
-- **State Management:** useState, useEffect, useCallback
-- **Sync:** localStorage events for tab sync
+### 1. Patient Registration
+Users can register a new patient with the following fields:
+- Personal info (name, DOB, age, gender, phone, email, address)
+- Emergency contact (name, relation, phone)
+- Medical info (blood group, allergies, conditions)
 
----
+### 2. Patient List
+Displays all patients in a scrollable, card-based UI. Each card includes:
+- Patient name, gender, age
+- Buttons to Edit or Delete
+- Clickable name to view full details
 
-## UI Overview
+### 3. SQL Query Form
+Allows raw SQL queries directly in the browser to fetch and filter patient data.
 
-- `/` — Main Dashboard: Register patient, view list, run query
-- `/patients/:id` — Detail view for a patient
-- `/edit/:id` — Edit patient form with pre-filled data
+### 4. Local Persistence
+Patient data is stored using PGlite (runs in IndexedDB). Changes also reflect in `localStorage` for syncing.
 
----
-
-## Folder Structure
-
-```
-src/
-├── components/
-│   ├── Header/
-│   ├── Footer/
-│   ├── PatientForm/
-│   ├── PatientList/
-│   ├── PatientDetail/
-│   ├── EditPatientForm/
-│   └── QueryForm/
-├── helpers/
-│   └── formHelpers.js
-├── services/
-│   └── databaseService.js
-├── App.js
-└── index.js
-```
+### 5. Multi-Tab Synchronization
+Whenever a tab modifies patient data, it updates `localStorage`, triggering updates in all other open tabs.
 
 ---
 
 ## Setup Instructions
 
+1. **Clone the repo**:
 ```bash
-# 1. Clone repo
-git clone https://github.com/your-username/medblocks.git
+git clone https://github.com/yourusername/medblocks.git
 cd medblocks
+```
 
-# 2. Install dependencies
+2. **Install dependencies**:
+```bash
 npm install
+```
 
-# 3. Start development server
-npm start
+3. **Run the development server**:
+```bash
+npm run dev
+```
+
+4. **Build for production**:
+```bash
+npm run build
+npm run preview
 ```
 
 ---
 
-## Local Database Schema
+## Deployment
 
-```sql
-CREATE TABLE IF NOT EXISTS patients (
-  id SERIAL PRIMARY KEY,
-  name TEXT NOT NULL,
-  dob TEXT,
-  age INTEGER,
-  gender TEXT,
-  phone TEXT,
-  email TEXT,
-  address TEXT,
-  emergencycontactname TEXT,
-  emergencycontactrelation TEXT,
-  emergencycontactphone TEXT,
-  bloodgroup TEXT,
-  allergies TEXT,
-  conditions TEXT,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  modified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-```
+The app is deployed on Vercel:
+
+[https://patient-registration-pearl.vercel.app](https://patient-registration-pearl.vercel.app)
+
+To deploy yourself:
+
+- Push to GitHub
+- Link GitHub repo on [vercel.com](https://vercel.com/)
+- Select root directory, hit deploy
 
 ---
 
-## Multi-tab Sync Strategy
+## API & Storage Details
 
-- Every time a patient is added/updated/deleted:
-  - Local DB (`PGlite`) is updated.
-  - Entire patient list is stored in `localStorage`.
-  - `storage` event listener in other tabs reloads patient data.
+This is a frontend-only app — no backend API exists.
 
----
-
-## Highlights
-
-- ✅ Validates DOB to be only in the past (not future)
-- 📆 Age is automatically calculated from date of birth
-- 📦 Pure browser-based — no backend server required
-- 🔄 Synchronized across tabs with `localStorage` event
-- ☁️ Future-ready for migration to ElectricSQL or Supabase
+- Patient data is stored locally using **PGlite**
+- `initDb()` creates table schema
+- `addPatient()`, `getPatients()`, `updatePatient()`, and `deletePatient()` use SQL queries against local PGlite instance
+- `localStorage` sync mirrors database state to trigger tab updates
 
 ---
 
-## Roadmap
+## Commit History Example (for reference)
 
-- [ ] Add patient image upload
-- [ ] Export patient records as CSV/PDF
-- [ ] Add login & role-based access (Doctor, Admin)
-- [ ] Sync with cloud DB using ElectricSQL
-- [ ] Dark mode toggle
+- `feat: set up project and Tailwind`
+- `feat: add PGlite db and init schema`
+- `feat: implement PatientForm component`
+- `feat: display patient list with sorting`
+- `feat: add SQL query support`
+- `feat: multi-tab sync using localStorage`
+- `fix: prevent future DOB entry`
+- `chore: polish UI and add validation`
+- `docs: add README`
 
 ---
 
-## Author
+## Challenges Faced
 
-Made with 💙 by Samir Aghav — combining health tech with frontend magic.
+- **Synchronizing across tabs**: localStorage events don’t trigger in the same tab, so sync had to rely on event listeners + re-fetching from db
+- **Persisting SQL-based storage**: Ensuring `PGlite` and `localStorage` remain in sync was crucial
+- **Preventing invalid DOB**: Added validation to block future-dated birth entries with snackbar warning
+- **No backend**: All logic had to be done on frontend, including sorting, validation, and persistence
 
 ---
 
 ## License
 
-MIT — feel free to use, modify and share!
+This project is open-source and MIT-licensed.
