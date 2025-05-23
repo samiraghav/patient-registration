@@ -14,7 +14,7 @@ const Section = ({ id, title, children, span = "md:col-span-1" }) => {
   const icons = {
     register: <FaPlus size={20} className="text-[#334EAC]" />,
     patients: <FaUsers size={20} className="text-[#334EAC]" />,
-    query: <FaSearch size={20} className="text-[#334EAC]" />,
+    query: <FaSearch size={20} className="text-[#334EAC]" />
   };
 
   return (
@@ -44,23 +44,45 @@ const App = () => {
       await initDb();
       const data = await getPatients();
       setPatients(data);
+      localStorage.setItem("patients", JSON.stringify(data));
     } catch (error) {
       console.error("Error fetching patients:", error);
     }
   }, []);
 
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+  const handleAddPatient = useCallback(
+    async (patient) => {
+      try {
+        await addPatient(patient);
+        await fetchData();
+      } catch (error) {
+        console.error("Error adding patient:", error);
+      }
+    },
+    [fetchData]
+  );
 
-  const handleAddPatient = useCallback(async (patient) => {
-    try {
-      await addPatient(patient);
-      await fetchData();
-    } catch (error) {
-      console.error("Error adding patient:", error);
+  // Initial hydration from localStorage
+  useEffect(() => {
+    const stored = localStorage.getItem("patients");
+    if (stored) {
+      setPatients(JSON.parse(stored));
+    } else {
+      fetchData();
     }
   }, [fetchData]);
+
+  // Multi-tab sync
+  useEffect(() => {
+    const handleStorageChange = (e) => {
+      if (e.key === "patients") {
+        const updated = JSON.parse(e.newValue || "[]");
+        setPatients(updated);
+      }
+    };
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
 
   return (
     <Router>
@@ -109,6 +131,7 @@ const App = () => {
             </section>
 
           </div>
+
           <Routes>
             <Route
               path="/"
@@ -125,7 +148,7 @@ const App = () => {
                           <div>
                             <PatientList patients={patients} onDelete={fetchData} />
                           </div>
-                        ),
+                        )
                       }}
                     </Section>
 

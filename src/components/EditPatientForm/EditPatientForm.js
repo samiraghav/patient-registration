@@ -1,15 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getPatients, initDb, updatePatient } from '../../services/databaseService';
-import {
-  InputField,
-  SelectField,
-  genderOptions,
-  bloodGroupOptions,
-  calculateAge,
-} from '../../helpers/formHelpers';
+import { InputField, SelectField, genderOptions, bloodGroupOptions, calculateAge } from '../../helpers/formHelpers';
 import { useSnackbar } from 'notistack';
-import { FaUser, FaCalendarAlt, FaVenusMars, FaPhone, FaEnvelope, FaMapMarkerAlt, FaUserShield, FaSyringe, FaNotesMedical, FaProcedures, FaSave,} from "react-icons/fa";
+import { FaUser, FaCalendarAlt, FaVenusMars, FaPhone, FaEnvelope, FaMapMarkerAlt, FaUserShield, FaSyringe, FaNotesMedical, FaProcedures, FaSave} from "react-icons/fa";
 
 const EditPatientForm = ({ onPatientUpdated }) => {
   const { enqueueSnackbar } = useSnackbar();

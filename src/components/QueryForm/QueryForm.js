@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { queryPatients } from '../../services/databaseService';
-import {
-    FaTerminal, FaDatabase, FaCode, FaPlay
-} from 'react-icons/fa';
+import { FaTerminal, FaDatabase, FaCode, FaPlay } from 'react-icons/fa';
 
 const QueryForm = ({ onQueryExecuted }) => {
   const [sql, setSql] = useState('');
