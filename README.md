@@ -1,70 +1,137 @@
-# Getting Started with Create React App
+# Medblocks — Local-first Patient Management System
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Medblocks is a modern, offline-first web application for managing patient records in small clinics or hospitals. It features real-time local database storage, structured data entry forms, powerful querying capabilities, and a beautiful, intuitive interface built with React and Tailwind CSS.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- **Patient Registration:** Clean, validated form with DOB → Age auto-calculation.
+- **Smart Validation:** Prevents future DOB entries and alerts user with toasts.
+- **Full CRUD:** Add, view, edit, delete patients.
+- **Emergency + Medical Info:** Store contact, allergy, condition, and blood group data.
+- **Query System:** Run advanced SQL-like queries (e.g., filter by age/gender).
+- **Offline-first with IndexedDB:** Uses PGlite to store data locally in browser.
+- **Real-time Multi-tab Sync:** Changes in one tab instantly reflect in others.
+- **Modern UI/UX:** Built with React, Tailwind CSS, and React Icons.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Tech Stack
 
-### `npm test`
+- **Frontend:** React 18, React Router, Tailwind CSS, React Icons, Notistack
+- **Local DB:** [@electric-sql/pglite](https://github.com/electric-sql/pglite) — PostgreSQL running on IndexedDB
+- **State Management:** useState, useEffect, useCallback
+- **Sync:** localStorage events for tab sync
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## UI Overview
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- `/` — Main Dashboard: Register patient, view list, run query
+- `/patients/:id` — Detail view for a patient
+- `/edit/:id` — Edit patient form with pre-filled data
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Folder Structure
 
-### `npm run eject`
+```
+src/
+├── components/
+│   ├── Header/
+│   ├── Footer/
+│   ├── PatientForm/
+│   ├── PatientList/
+│   ├── PatientDetail/
+│   ├── EditPatientForm/
+│   └── QueryForm/
+├── helpers/
+│   └── formHelpers.js
+├── services/
+│   └── databaseService.js
+├── App.js
+└── index.js
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+---
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Setup Instructions
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```bash
+# 1. Clone repo
+git clone https://github.com/your-username/medblocks.git
+cd medblocks
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+# 2. Install dependencies
+npm install
 
-## Learn More
+# 3. Start development server
+npm start
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+---
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Local Database Schema
 
-### Code Splitting
+```sql
+CREATE TABLE IF NOT EXISTS patients (
+  id SERIAL PRIMARY KEY,
+  name TEXT NOT NULL,
+  dob TEXT,
+  age INTEGER,
+  gender TEXT,
+  phone TEXT,
+  email TEXT,
+  address TEXT,
+  emergencycontactname TEXT,
+  emergencycontactrelation TEXT,
+  emergencycontactphone TEXT,
+  bloodgroup TEXT,
+  allergies TEXT,
+  conditions TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  modified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+---
 
-### Analyzing the Bundle Size
+## Multi-tab Sync Strategy
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- Every time a patient is added/updated/deleted:
+  - Local DB (`PGlite`) is updated.
+  - Entire patient list is stored in `localStorage`.
+  - `storage` event listener in other tabs reloads patient data.
 
-### Making a Progressive Web App
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Highlights
 
-### Advanced Configuration
+- ✅ Validates DOB to be only in the past (not future)
+- 📆 Age is automatically calculated from date of birth
+- 📦 Pure browser-based — no backend server required
+- 🔄 Synchronized across tabs with `localStorage` event
+- ☁️ Future-ready for migration to ElectricSQL or Supabase
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+---
 
-### Deployment
+## Roadmap
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+- [ ] Add patient image upload
+- [ ] Export patient records as CSV/PDF
+- [ ] Add login & role-based access (Doctor, Admin)
+- [ ] Sync with cloud DB using ElectricSQL
+- [ ] Dark mode toggle
 
-### `npm run build` fails to minify
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Author
+
+Made with 💙 by Samir Aghav — combining health tech with frontend magic.
+
+---
+
+## License
+
+MIT — feel free to use, modify and share!
