@@ -1,13 +1,7 @@
 import React, { useState } from 'react';
-import {
-  InputField,
-  SelectField,
-  genderOptions,
-  bloodGroupOptions,
-  calculateAge,
-} from '../../helpers/formHelpers';
+import { InputField, SelectField, genderOptions, bloodGroupOptions, calculateAge } from '../../helpers/formHelpers';
 import { useSnackbar } from 'notistack';
-import { FaUser, FaCalendarAlt, FaVenusMars, FaPhone, FaEnvelope, FaMapMarkerAlt, FaUserShield, FaSyringe, FaNotesMedical, FaProcedures, FaSave,} from "react-icons/fa";
+import { FaUser, FaCalendarAlt, FaVenusMars, FaPhone, FaEnvelope, FaMapMarkerAlt, FaUserShield, FaSyringe, FaNotesMedical, FaProcedures, FaSave} from "react-icons/fa";
 
 const PatientForm = ({ onAddPatient }) => {
   const { enqueueSnackbar } = useSnackbar();
@@ -48,6 +42,14 @@ const PatientForm = ({ onAddPatient }) => {
       Object.entries(patient).map(([k, v]) => [k, typeof v === 'string' ? v.trim() : v])
     );
 
+    const enteredDate = new Date(cleaned.dob);
+    const today = new Date();
+
+    // Validate DOB is not in the future
+    if (enteredDate > today) {
+      enqueueSnackbar('Please enter a valid Date of Birth.', { variant: 'warning' });
+      return;
+    }
 
     try {
       await onAddPatient(cleaned);
@@ -81,8 +83,8 @@ const PatientForm = ({ onAddPatient }) => {
         </h3>
 
         <InputField id="name" name="name" value={patient.name} onChange={handleChange} required icon={FaUser} label="Full Name" />
-        <InputField id="dob" name="dob" type="date" value={patient.dob} onChange={handleChange} icon={FaCalendarAlt} label="Date of Birth" />
-        <InputField id="age" name="age" type="number" value={patient.age} onChange={() => {}} icon={FaCalendarAlt} label="Age" />
+        <InputField id="dob" name="dob" type="date" value={patient.dob} onChange={handleChange} icon={FaCalendarAlt} label="Date of Birth" max={new Date().toISOString().split("T")[0]}/>
+        <InputField id="age" name="age" type="number" value={patient.age} onChange={() => {}} icon={FaCalendarAlt} label="Age(Auto from Date of Birth)" />
         <SelectField id="gender" name="gender" value={patient.gender} onChange={handleChange} required icon={FaVenusMars} label="Gender" options={genderOptions} />
         <InputField id="phone" name="phone" type="tel" value={patient.phone} onChange={handleChange} required icon={FaPhone} label="Phone Number" />
         <InputField id="email" name="email" type="email" value={patient.email} onChange={handleChange} icon={FaEnvelope} label="Email Address" />

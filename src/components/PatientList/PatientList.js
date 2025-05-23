@@ -56,8 +56,11 @@ const PatientCard = ({ patient, index, onDelete }) => {
     <div
       className="relative bg-white border border-[#BAD6EB]/30 rounded-xl shadow-sm p-4 flex items-center justify-between"
       style={{
+        animationName: 'fadeInUp',
+        animationDuration: '0.5s',
+        animationTimingFunction: 'ease-out',
+        animationFillMode: 'forwards',
         animationDelay: `${index * 50}ms`,
-        animation: 'fadeInUp 0.5s ease-out forwards',
       }}
     >
       <div className="flex items-center gap-4 cursor-pointer" onClick={() => navigate(`/patients/${patient.id}`)}>
