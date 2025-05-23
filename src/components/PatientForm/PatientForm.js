@@ -97,7 +97,7 @@ const PatientForm = ({ onAddPatient }) => {
 
         <h3 className="col-span-full text-[#334EAC] font-bold uppercase text-sm border-b pb-1 pt-4">Medical Details</h3>
         <SelectField id="bloodgroup" name="bloodgroup" value={patient.bloodgroup} onChange={handleChange} required icon={FaSyringe} label="Blood Group" options={bloodGroupOptions} />
-        <InputField id="allergies" name="allergies" type="textarea" value={patient.allergies} onChange={handleChange} required icon={FaNotesMedical} label="Allergies" />
+        <InputField id="allergies" name="allergies" type="textarea" value={patient.allergies} onChange={handleChange} icon={FaNotesMedical} label="Allergies" />
         <InputField id="conditions" name="conditions" type="textarea" value={patient.conditions} onChange={handleChange} required icon={FaProcedures} label="Medical Conditions" />
 
         <div className="col-span-full flex gap-4 justify-end">
