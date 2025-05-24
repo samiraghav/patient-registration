@@ -28,7 +28,7 @@ Users can register a new patient with the following fields:
 Displays all patients in a scrollable, card-based UI. Each card includes:
 - Patient name, gender, age
 - Buttons to Edit or Delete
-- Clickable name to view full details
+- Button to Popup view full patient details
 
 ### 3. SQL Query Form
 Allows raw SQL queries directly in the browser to fetch and filter patient data.
