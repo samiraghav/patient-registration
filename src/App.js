@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { initDb, getPatients, addPatient } from "./services/databaseService";
 import PatientForm from "./components/PatientForm/PatientForm";
 import PatientList from "./components/PatientList/PatientList";
-import PatientDetailPage from "./components/PatientDetail/PatientDetail";
 import QueryForm from "./components/QueryForm/QueryForm";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
