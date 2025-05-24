@@ -92,20 +92,6 @@ This is a frontend-only app — no backend API exists.
 
 ---
 
-## Commit History Example (for reference)
-
-- `feat: set up project and Tailwind`
-- `feat: add PGlite db and init schema`
-- `feat: implement PatientForm component`
-- `feat: display patient list with sorting`
-- `feat: add SQL query support`
-- `feat: multi-tab sync using localStorage`
-- `fix: prevent future DOB entry`
-- `chore: polish UI and add validation`
-- `docs: add README`
-
----
-
 ## Challenges Faced
 
 - **Synchronizing across tabs**: localStorage events don’t trigger in the same tab, so sync had to rely on event listeners + re-fetching from db
