@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { FaTimes } from 'react-icons/fa';
+import { calculateAge } from '../../helpers/formHelpers';
 
 const LabelValue = ({ label, value, className = '' }) => (
   <div className={`flex flex-col text-left ${className}`}>
@@ -7,7 +8,7 @@ const LabelValue = ({ label, value, className = '' }) => (
       {label}
     </span>
     <span className="text-gray-800 text-[15px] font-medium">
-      {value?.trim?.() ? value : 'Not provided'}
+      {value || value === 0 ? value : 'Not provided'}
     </span>
   </div>
 );
@@ -19,6 +20,7 @@ const SectionTitle = ({ children }) => (
 );
 
 const PatientDetailsModal = ({ patient, onClose }) => {
+  const age = calculateAge(patient.dob);
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     return () => {
@@ -28,7 +30,7 @@ const PatientDetailsModal = ({ patient, onClose }) => {
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-md">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl p-6 md:p-8 relative overflow-y-auto max-h-[90vh]">
+      <div className="bg-white rounded-2xl shadow-2xl w-[90%] p-6 md:p-8 relative overflow-y-auto max-h-[75vh] md:max-h-[90vh]">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition"
@@ -42,7 +44,7 @@ const PatientDetailsModal = ({ patient, onClose }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <LabelValue label="Full Name" value={patient.name} />
               <LabelValue label="Date of Birth" value={patient.dob} />
-              <LabelValue label="Age" value={patient.age} />
+              <LabelValue label="Age" value={age} />
               <LabelValue label="Gender" value={patient.gender} />
               <LabelValue label="Phone Number" value={patient.phone} />
               <LabelValue label="Email" value={patient.email} />

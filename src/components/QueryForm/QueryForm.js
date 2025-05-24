@@ -42,7 +42,7 @@ const QueryForm = ({ onQueryExecuted }) => {
             onChange={(e) => setSql(e.target.value)}
             placeholder="SELECT * FROM patients WHERE age >= 60"
             rows={6}
-            className="w-full p-3 border border-[#BAD6EB]/40 h-[260px] rounded-md shadow-sm font-mono text-sm focus:outline-none focus:ring-2 focus:ring-[#334EAC]/30"
+            className="w-full p-3 border border-[#BAD6EB]/40 h-[280px] rounded-md shadow-sm font-mono text-sm focus:outline-none focus:ring-2 focus:ring-[#334EAC]/30"
             required
           />
 
@@ -94,7 +94,7 @@ const QueryForm = ({ onQueryExecuted }) => {
             <FaDatabase /> Results
           </h2>
 
-          <div className="bg-[#F8FAFC] border border-[#BAD6EB]/30 p-4 rounded-md h-[260px] overflow-auto text-sm font-mono text-left">
+          <div className="bg-[#F8FAFC] border border-[#BAD6EB]/30 p-4 rounded-md h-[280px] overflow-auto text-sm font-mono text-left">
             {results.length > 0 ? (
               <pre>{JSON.stringify(results, null, 2)}</pre>
             ) : (

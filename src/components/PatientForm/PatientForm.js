@@ -47,13 +47,13 @@ const PatientForm = ({ onAddPatient }) => {
 
     // Validate DOB is not in the future
     if (enteredDate > today) {
-      enqueueSnackbar('Please enter a valid Date of Birth.', { variant: 'warning' });
+      enqueueSnackbar('Please enter a valid Date of Birth.', { variant: 'warning', autoHideDuration: 3000  });
       return;
     }
 
     try {
       await onAddPatient(cleaned);
-      enqueueSnackbar('Patient registered successfully!', { variant: 'success' });
+      enqueueSnackbar('Patient registered successfully!', { variant: 'success', autoHideDuration: 3000 });
       setPatient({
         name: '',
         dob: '',
