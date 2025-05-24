@@ -145,9 +145,11 @@ const App = () => {
                               <div>
                                 <PatientList patients={patients} onDelete={fetchData} />
                               </div>
-                            )
+                            ),
+                            patientCount: <span className="px-4 py-2 bg-[rgb(37,99,235)] hover:bg-[#2A3F8D] text-white rounded-md flex items-center gap-2">Total: {patients.length}</span>
                           }}
                         </Section>
+
 
                         <Section id="query" title="Query Patients" span="md:col-span-3">
                           <div>
