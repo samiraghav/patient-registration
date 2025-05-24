@@ -32,7 +32,7 @@ const EditPatientForm = ({ onPatientUpdated }) => {
     }
   };
 
-  const handleSubmit = async (e) => {    
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const cleaned = Object.fromEntries(
@@ -41,11 +41,17 @@ const EditPatientForm = ({ onPatientUpdated }) => {
 
     try {
       await updatePatient(id, cleaned);
-      enqueueSnackbar('Patient updated successfully!', { variant: 'success' });
+      enqueueSnackbar('Patient updated successfully!', {
+        variant: 'success',
+        autoHideDuration: 3000,
+      });
       if (onPatientUpdated) onPatientUpdated();
       navigate("/");
     } catch (error) {
-      enqueueSnackbar('Failed to update patient.', { variant: 'error' });
+      enqueueSnackbar('Failed to update patient.', {
+        variant: 'error',
+        autoHideDuration: 3000,
+      });
       console.error('Update failed:', error);
     }
   };

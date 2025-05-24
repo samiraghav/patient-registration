@@ -1,8 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaUserCircle, FaEdit, FaTrash } from 'react-icons/fa';
+import { FaUserCircle, FaEdit, FaTrash, FaEye } from 'react-icons/fa';
 import { deletePatient } from '../../services/databaseService';
 import { useSnackbar } from 'notistack';
+import PatientDetailsModal from '../PatientDetail/PatientDetailsModal';
 
 const calculateAge = (dobString) => {
   if (!dobString) return '';
@@ -16,11 +17,10 @@ const calculateAge = (dobString) => {
   return age;
 };
 
-const PatientCard = ({ patient, index, onDelete }) => {
+const PatientCard = ({ patient, index, onDelete, onOpenModal }) => {
   const navigate = useNavigate();
-  const age = calculateAge(patient.dob);
-
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const age = calculateAge(patient.dob);
 
   const handleDelete = () => {
     const action = (snackbarId) => (
@@ -29,7 +29,7 @@ const PatientCard = ({ patient, index, onDelete }) => {
           className="text-red-500 font-semibold text-sm"
           onClick={async () => {
             await deletePatient(patient.id);
-            enqueueSnackbar('Patient deleted successfully!', { variant: 'success' });
+            enqueueSnackbar('Patient deleted successfully!', { variant: 'success', autoHideDuration: 3000, });
             if (onDelete) onDelete();
             closeSnackbar(snackbarId);
           }}
@@ -49,6 +49,7 @@ const PatientCard = ({ patient, index, onDelete }) => {
       variant: 'warning',
       action,
       persist: true,
+      autoHideDuration: 3000,
     });
   };
 
@@ -63,23 +64,40 @@ const PatientCard = ({ patient, index, onDelete }) => {
         animationDelay: `${index * 50}ms`,
       }}
     >
-      <div className="flex items-center gap-4 cursor-pointer" onClick={() => navigate(`/patients/${patient.id}`)}>
-        <div className="w-12 h-12 rounded-full bg-[rgb(37,99,235)] text-white flex items-center justify-center shadow">
+      <div className="flex items-center gap-2">
+        <div className="hidden md:flex w-12 h-12 rounded-full bg-[rgb(37,99,235)] text-white items-center justify-center shadow">
           <FaUserCircle size={28} />
         </div>
-        <div className="flex flex-col">
-          <span className="text-[#081F5C] font-medium text-base">{patient.name}</span>
+        <div className="flex flex-col text-left">
+          <span className="text-[#081F5C] font-medium text-base">
+            {patient.name.length > 20 ? patient.name.slice(0, 20) + '...' : patient.name}
+          </span>
           <span className="text-sm text-[#7096D1]">
             {patient.gender} {age ? `• ${age} yrs` : ''}
           </span>
         </div>
       </div>
 
-      <div className="flex gap-3">
-        <button className="text-[#334EAC] hover:text-[#2a3f8d]" onClick={() => navigate(`/edit/${patient.id}`)}>
+      <div className="flex gap-4 items-center">
+        <button
+          className="text-[#334EAC] hover:text-[#2a3f8d]"
+          onClick={() => onOpenModal(patient)}
+          title="View Details"
+        >
+          <FaEye size={18} />
+        </button>
+        <button
+          className="text-[#334EAC] hover:text-[#2a3f8d]"
+          onClick={() => navigate(`/edit/${patient.id}`)}
+          title="Edit Patient"
+        >
           <FaEdit size={18} />
         </button>
-        <button className="text-red-500 hover:text-red-700" onClick={handleDelete}>
+        <button
+          className="text-red-500 hover:text-red-700"
+          onClick={handleDelete}
+          title="Delete Patient"
+        >
           <FaTrash size={18} />
         </button>
       </div>
@@ -89,16 +107,13 @@ const PatientCard = ({ patient, index, onDelete }) => {
 
 const PatientList = ({ patients, onDelete }) => {
   const [sortBy, setSortBy] = useState('created_at');
+  const [selectedPatient, setSelectedPatient] = useState(null);
 
   const sortedPatients = useMemo(() => {
     return [...patients].sort((a, b) => {
-      if (sortBy === 'name') {
-        return a.name.localeCompare(b.name);
-      } else if (sortBy === 'age') {
-        return calculateAge(b.dob) - calculateAge(a.dob);
-      } else {
-        return new Date(b.created_at) - new Date(a.created_at);
-      }
+      if (sortBy === 'name') return a.name.localeCompare(b.name);
+      if (sortBy === 'age') return calculateAge(b.dob) - calculateAge(a.dob);
+      return new Date(b.created_at) - new Date(a.created_at);
     });
   }, [patients, sortBy]);
 
@@ -121,10 +136,23 @@ const PatientList = ({ patients, onDelete }) => {
           <p className="text-sm text-[#7096D1] text-center">No patients found.</p>
         ) : (
           sortedPatients.map((patient, index) => (
-            <PatientCard key={patient.id} patient={patient} index={index} onDelete={onDelete} />
+            <PatientCard
+              key={patient.id}
+              patient={patient}
+              index={index}
+              onDelete={onDelete}
+              onOpenModal={setSelectedPatient}
+            />
           ))
         )}
       </div>
+
+      {selectedPatient && (
+        <PatientDetailsModal
+          patient={selectedPatient}
+          onClose={() => setSelectedPatient(null)}
+        />
+      )}
     </div>
   );
 };
